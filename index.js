@@ -101,6 +101,8 @@ function convert (path, frmt) {
         }
       })
     })
+
+    md.documentEnd()
   })
 
   return s
