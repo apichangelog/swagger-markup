@@ -1,9 +1,9 @@
 {
   "name": "swagger-markup",
   "dependencies": {
-    "abstract-document-builder": "^1.0.0",
+    "abstract-document-builder": "github:apichangelog/abstract-document-builder",
     "confluence-writer": "^1.0.0",
-    "markdown-writer": "^1.0.1",
+    "markdown-writer": "github:apichangelog/markdown-writer",
     "meow": "^3.7.0",
     "swagger-parser": "^3.4.0",
     "util-each": "^1.0.1"
