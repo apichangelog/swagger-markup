@@ -5,6 +5,7 @@
     "confluence-writer": "^1.0.0",
     "markdown-writer": "github:apichangelog/markdown-writer",
     "meow": "^3.7.0",
+    "object-merge": "^2.5.1",
     "swagger-parser": "^3.4.0",
     "util-each": "^1.0.1"
   },
