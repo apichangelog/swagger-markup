@@ -3,6 +3,7 @@ var DocumentBuilder = require('abstract-document-builder')
 var MarkdownWriter = require('markdown-writer')
 var ConfluenceWriter = require('confluence-writer')
 var each = require('util-each')
+var objectMerge = require('object-merge')
 
 module.exports = convert
 
@@ -36,6 +37,20 @@ function convert (path, frmt) {
   }
 
   parser.bundle(path, function (err, api) {
+    for (var path in api.paths) {
+      if (api.paths[path].parameters !== undefined) {
+        var parameters = api.paths[path].parameters
+        delete api.paths[path].parameters
+        for (var operation in api.paths[path]) {
+          if (api.paths[path][operation].parameters !== undefined) {
+            api.paths[path][operation].parameters = objectMerge(parameters, api.paths[path][operation].parameters)
+          } else {
+            api.paths[path][operation].parameters = parameters
+          }
+        }
+      }
+    }
+
     if (err) {
       s.emit('error', err)
       return
