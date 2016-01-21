@@ -69,7 +69,7 @@ function convert (path, frmt) {
     md.tableHeaderRow('Resource Path', 'Operation', 'Description')
     each(api.paths, function (resource, rpath) {
       each(resource, function (info, method) {
-        md.tableRow(rpath, md._link([rpath, method].join('-'), method), info.summary)
+        md.tableRow(rpath, md._link('`' + method.toUpperCase() + '`', '#' + [rpath, method].join('-')), info.summary)
       })
     })
     md.tableFooter()
@@ -77,7 +77,7 @@ function convert (path, frmt) {
     each(api.paths, function (resource, rpath) {
       each(resource, function (info, method) {
         md.anchor([rpath, method].join('-'))
-        md.header(3, rpath + ' (' + method + ')')
+        md.header(3, '`' + method.toUpperCase() + ' ' + rpath + '`')
         md.text(info.description)
 
         if (info.parameters && info.parameters.length > 0) {
