@@ -20,7 +20,7 @@ function refname (ref) {
   return ref.replace(/.*\/([^\/])/, '$1')
 }
 
-function convert (path, frmt) {
+function convert (path, frmt, options) {
   var Writer = format[frmt]
   var s = new Writer()
   var md = new DocumentBuilder(s)
@@ -65,19 +65,30 @@ function convert (path, frmt) {
     md.tableFooter()
 
     md.header(2, 'Operations')
-    md.tableHeader()
-    md.tableHeaderRow('Resource Path', 'Operation', 'Description')
-    each(api.paths, function (resource, rpath) {
-      each(resource, function (info, method) {
-        md.tableRow(rpath, md._link('`' + method.toUpperCase() + '`', '#' + [rpath, method].join('-')), info.summary)
+
+    if (options !== undefined &&
+        options.toc !== undefined &&
+        options.toc) {
+      md.tableHeader()
+      md.tableHeaderRow('Resource Path', 'Operation', 'Description')
+      each(api.paths, function (resource, rpath) {
+        each(resource, function (info, method) {
+          md.tableRow(rpath, md._link('`' + method.toUpperCase() + '`', '#' + [rpath, method].join('-')), info.summary)
+        })
       })
-    })
-    md.tableFooter()
+      md.tableFooter()
+    }
 
     each(api.paths, function (resource, rpath) {
       each(resource, function (info, method) {
         md.anchor([rpath, method].join('-'))
-        md.header(3, '`' + method.toUpperCase() + ' ' + rpath + '`')
+        if (options !== undefined &&
+            options.renderer !== undefined &&
+            options.renderer.methodPath !== undefined) {
+          md.header(3, options.renderer.methodPath(method, rpath))
+        } else {
+          md.header(3, '`' + method.toUpperCase() + ' ' + rpath + '`')
+        }
         md.text(info.description)
 
         if (info.parameters && info.parameters.length > 0) {
