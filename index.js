@@ -31,7 +31,7 @@ function convert (path, frmt, options) {
       if (info.schema.type) {
         return info.schema.type
       }
-      return md._link(refname(info.schema.$ref))
+      return md._link(refname(info.schema.$ref), '#' + refname(info.schema.$ref).replace(/[-_]/g, ''))
     }
     return info.type
   }
@@ -73,7 +73,7 @@ function convert (path, frmt, options) {
       md.tableHeaderRow('Resource Path', 'Operation', 'Description')
       each(api.paths, function (resource, rpath) {
         each(resource, function (info, method) {
-          md.tableRow(rpath, md._link('`' + method.toUpperCase() + '`', '#' + [rpath, method].join('-')), info.summary)
+          md.tableRow(rpath, md._link('`' + method.toUpperCase() + '`', '#' + [method, rpath].join('-').replace(/[\/\{\}_]/g, '')), info.summary)
         })
       })
       md.tableFooter()
@@ -81,7 +81,7 @@ function convert (path, frmt, options) {
 
     each(api.paths, function (resource, rpath) {
       each(resource, function (info, method) {
-        md.anchor([rpath, method].join('-'))
+        md.anchor([method, rpath].join('-').replace(/[\/\{\}_]/g, ''));
         if (options !== undefined &&
             options.renderer !== undefined &&
             options.renderer.methodPath !== undefined) {
@@ -116,14 +116,14 @@ function convert (path, frmt, options) {
     md.header(2, 'Definitions')
     each(api.definitions, function (def, name) {
       var r = def.required || []
-      md.anchor(name)
+      md.anchor(name.replace(/[-_]/g, ''))
       md.header(3, name)
       md.tableHeader()
       md.tableHeaderRow('Field Name', 'Field Type', 'Description', 'Required?', 'Read Only?')
       each(def.properties, function (pi, pn) {
         md.tableRow(pn, pi.type, pi.description, yes(~r.indexOf(pn)), yes(pi.readOnly))
         if (pi.items && pi.items.$ref) {
-          md.tableRow(' - Item', md._link(refname(pi.items.$ref)), '', '', '')
+          md.tableRow(' - Item', md._link(refname(pi.items.$ref), '#' + refname(pi.items.$ref).replace(/[-_]/g, '')), '', '', '')
         }
       })
     })
