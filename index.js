@@ -64,6 +64,15 @@ function convert (path, frmt, options) {
     md.tableRow('API Version', api.info.version)
     md.tableFooter()
 
+    if (api['x-documentation'] !== undefined) {
+      md.header(2, 'Guides');
+      each(api['x-documentation'], function (doc) {
+        md.anchor(doc.title.replace(/ /, '-').toLowerCase().replace(/[\/\{\}_]/g, ''));
+        md.header(3, doc.title);
+        md.text(doc.content);
+      });
+    }
+
     md.header(2, 'Operations')
 
     if (options !== undefined &&
